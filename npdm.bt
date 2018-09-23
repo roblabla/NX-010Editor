@@ -1,0 +1,1366 @@
+//------------------------------------------------
+//--- 010 Editor v7.0.2 Binary Template
+//
+//      File: META
+//   Authors: ogniK, roblabla
+//   Version: 1.0
+//   Purpose: Parse NPDM files
+//  Category: Nintendo Switch
+// File Mask: *.npdm
+//  ID Bytes: META
+//   History: 
+//------------------------------------------------
+string GetProcessCategory(int category) {
+    if(category == 1)
+        return "Kernel Built-in";
+    return "Regular Title";
+}
+
+string RetailCheck(int isRetail) {
+    if(isRetail == 1)
+        return "Retail Unit";
+    return "Development Unit";
+}
+
+struct _service {
+    struct _Control {
+        uchar ServiceNameLength : 3;
+        uchar : 4;
+        uchar CanRegister : 1;
+    } Control;
+    char ServiceName[Control.ServiceNameLength + 1];
+};
+
+string GetService(_service &service) {
+    return service.ServiceName + "    ";
+}
+
+string GetServiceDescription(_service &service) {
+    if(service.Control.CanRegister)
+        return "Service Register Permissions";
+    return "";
+}
+
+string SvcAccessMode(uchar access) {
+    if(access == 1)
+        return "Access Allowed";
+    return "Access Denied";
+}
+
+string UnknownAccessControl(uint32 desc) {
+    local uint32 low_bits;
+    while(desc & 1) {
+        desc >>= 1;
+        low_bits++;
+    }
+    string s = "";
+    SPrintf(s, "Unknown Access Control: %d", low_bits);
+    return s;
+}
+
+void GrabSVC(int svcNum) {
+    // Auto generated code
+    if(svcNum == 0) {
+        uchar svc : 1 <name="svc0x00(0x00)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 1) {
+        uchar svc : 1 <name="svcSetHeapSize(0x01)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 2) {
+        uchar svc : 1 <name="svcSetMemoryPermission(0x02)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 3) {
+        uchar svc : 1 <name="svcSetMemoryAttribute(0x03)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 4) {
+        uchar svc : 1 <name="svcMapMemory(0x04)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 5) {
+        uchar svc : 1 <name="svcUnmapMemory(0x05)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 6) {
+        uchar svc : 1 <name="svcQueryMemory(0x06)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 7) {
+        uchar svc : 1 <name="svcExitProcess(0x07)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 8) {
+        uchar svc : 1 <name="svcCreateThread(0x08)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 9) {
+        uchar svc : 1 <name="svcStartThread(0x09)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 10) {
+        uchar svc : 1 <name="svcExitThread(0x0a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 11) {
+        uchar svc : 1 <name="svcSleepThread(0x0b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 12) {
+        uchar svc : 1 <name="svcGetThreadPriority(0x0c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 13) {
+        uchar svc : 1 <name="svcSetThreadPriority(0x0d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 14) {
+        uchar svc : 1 <name="svcGetThreadCoreMask(0x0e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 15) {
+        uchar svc : 1 <name="svcSetThreadCoreMask(0x0f)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 16) {
+        uchar svc : 1 <name="svcGetCurrentProcessorNumber(0x10)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 17) {
+        uchar svc : 1 <name="svcSignalEvent(0x11)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 18) {
+        uchar svc : 1 <name="svcClearEvent(0x12)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 19) {
+        uchar svc : 1 <name="svcMapSharedMemory(0x13)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 20) {
+        uchar svc : 1 <name="svcUnmapSharedMemory(0x14)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 21) {
+        uchar svc : 1 <name="svcCreateTransferMemory(0x15)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 22) {
+        uchar svc : 1 <name="svcCloseHandle(0x16)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 23) {
+        uchar svc : 1 <name="svcResetSignal(0x17)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 24) {
+        uchar svc : 1 <name="svcWaitSynchronization(0x18)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 25) {
+        uchar svc : 1 <name="svcCancelSynchronization(0x19)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 26) {
+        uchar svc : 1 <name="svcArbitrateLock(0x1a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 27) {
+        uchar svc : 1 <name="svcArbitrateUnlock(0x1b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 28) {
+        uchar svc : 1 <name="svcWaitProcessWideKeyAtomic(0x1c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 29) {
+        uchar svc : 1 <name="svcSignalProcessWideKey(0x1d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 30) {
+        uchar svc : 1 <name="svcGetSystemTick(0x1e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 31) {
+        uchar svc : 1 <name="svcConnectToNamedPort(0x1f)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 32) {
+        uchar svc : 1 <name="svcSendSyncRequestLight(0x20)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 33) {
+        uchar svc : 1 <name="svcSendSyncRequest(0x21)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 34) {
+        uchar svc : 1 <name="svcSendSyncRequestWithUserBuffer(0x22)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 35) {
+        uchar svc : 1 <name="svcSendAsyncRequestWithUserBuffer(0x23)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 36) {
+        uchar svc : 1 <name="svcGetProcessId(0x24)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 37) {
+        uchar svc : 1 <name="svcGetThreadId(0x25)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 38) {
+        uchar svc : 1 <name="svcBreak(0x26)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 39) {
+        uchar svc : 1 <name="svcOutputDebugString(0x27)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 40) {
+        uchar svc : 1 <name="svcReturnFromException(0x28)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 41) {
+        uchar svc : 1 <name="svcGetInfo(0x29)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 42) {
+        uchar svc : 1 <name="svcFlushEntireDataCache(0x2a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 43) {
+        uchar svc : 1 <name="svcFlushDataCache(0x2b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 44) {
+        uchar svc : 1 <name="svcMapPhysicalMemory(0x2c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 45) {
+        uchar svc : 1 <name="svcUnmapPhysicalMemory(0x2d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 46) {
+        uchar svc : 1 <name="svc0x2E(0x2e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 47) {
+        uchar svc : 1 <name="svcGetLastThreadInfo(0x2f)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 48) {
+        uchar svc : 1 <name="svcGetResourceLimitLimitValue(0x30)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 49) {
+        uchar svc : 1 <name="svcGetResourceLimitCurrentValue(0x31)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 50) {
+        uchar svc : 1 <name="svcSetThreadActivity(0x32)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 51) {
+        uchar svc : 1 <name="svcGetThreadContext3(0x33)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 52) {
+        uchar svc : 1 <name="svc0x34(0x34)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 53) {
+        uchar svc : 1 <name="svc0x35(0x35)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 54) {
+        uchar svc : 1 <name="svc0x36(0x36)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 55) {
+        uchar svc : 1 <name="svc0x37(0x37)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 56) {
+        uchar svc : 1 <name="svc0x38(0x38)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 57) {
+        uchar svc : 1 <name="svc0x39(0x39)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 58) {
+        uchar svc : 1 <name="svc0x3A(0x3a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 59) {
+        uchar svc : 1 <name="svc0x3B(0x3b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 60) {
+        uchar svc : 1 <name="svcDumpInfo(0x3c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 61) {
+        uchar svc : 1 <name="svc0x3D(0x3d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 62) {
+        uchar svc : 1 <name="svc0x3E(0x3e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 63) {
+        uchar svc : 1 <name="svc0x3F(0x3f)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 64) {
+        uchar svc : 1 <name="svcCreateSession(0x40)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 65) {
+        uchar svc : 1 <name="svcAcceptSession(0x41)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 66) {
+        uchar svc : 1 <name="svcReplyAndReceiveLight(0x42)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 67) {
+        uchar svc : 1 <name="svcReplyAndReceive(0x43)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 68) {
+        uchar svc : 1 <name="svcReplyAndReceiveWithUserBuffer(0x44)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 69) {
+        uchar svc : 1 <name="svcCreateEvent(0x45)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 70) {
+        uchar svc : 1 <name="svc0x46(0x46)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 71) {
+        uchar svc : 1 <name="svc0x47(0x47)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 72) {
+        uchar svc : 1 <name="svc0x48(0x48)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 73) {
+        uchar svc : 1 <name="svc0x49(0x49)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 74) {
+        uchar svc : 1 <name="svc0x4A(0x4a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 75) {
+        uchar svc : 1 <name="svc0x4B(0x4b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 76) {
+        uchar svc : 1 <name="svc0x4C(0x4c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 77) {
+        uchar svc : 1 <name="svcSleepSystem(0x4d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 78) {
+        uchar svc : 1 <name="svcReadWriteRegister(0x4e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 79) {
+        uchar svc : 1 <name="svcSetProcessActivity(0x4f)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 80) {
+        uchar svc : 1 <name="svcCreateSharedMemory(0x50)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 81) {
+        uchar svc : 1 <name="svcMapTransferMemory(0x51)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 82) {
+        uchar svc : 1 <name="svcUnmapTransferMemory(0x52)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 83) {
+        uchar svc : 1 <name="svcCreateInterruptEvent(0x53)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 84) {
+        uchar svc : 1 <name="svcQueryPhysicalAddress(0x54)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 85) {
+        uchar svc : 1 <name="svcQueryIoMapping(0x55)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 86) {
+        uchar svc : 1 <name="svcCreateDeviceAddressSpace(0x56)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 87) {
+        uchar svc : 1 <name="svcAttachDeviceAddressSpace(0x57)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 88) {
+        uchar svc : 1 <name="svcDetachDeviceAddressSpace(0x58)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 89) {
+        uchar svc : 1 <name="svcMapDeviceAddressSpaceByForce(0x59)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 90) {
+        uchar svc : 1 <name="svcMapDeviceAddressSpaceAligned(0x5a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 91) {
+        uchar svc : 1 <name="svcMapDeviceAddressSpace(0x5b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 92) {
+        uchar svc : 1 <name="svcUnmapDeviceAddressSpace(0x5c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 93) {
+        uchar svc : 1 <name="svcInvalidateProcessDataCache(0x5d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 94) {
+        uchar svc : 1 <name="svcStoreProcessDataCache(0x5e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 95) {
+        uchar svc : 1 <name="svcFlushProcessDataCache(0x5f)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 96) {
+        uchar svc : 1 <name="svcDebugActiveProcess(0x60)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 97) {
+        uchar svc : 1 <name="svcBreakDebugProcess(0x61)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 98) {
+        uchar svc : 1 <name="svcTerminateDebugProcess(0x62)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 99) {
+        uchar svc : 1 <name="svcGetDebugEvent(0x63)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 100) {
+        uchar svc : 1 <name="svcContinueDebugEvent(0x64)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 101) {
+        uchar svc : 1 <name="svcGetProcessList(0x65)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 102) {
+        uchar svc : 1 <name="svcGetThreadList(0x66)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 103) {
+        uchar svc : 1 <name="svcGetDebugThreadContext(0x67)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 104) {
+        uchar svc : 1 <name="svcSetDebugThreadContext(0x68)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 105) {
+        uchar svc : 1 <name="svcQueryDebugProcessMemory(0x69)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 106) {
+        uchar svc : 1 <name="svcReadDebugProcessMemory(0x6a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 107) {
+        uchar svc : 1 <name="svcWriteDebugProcessMemory(0x6b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 108) {
+        uchar svc : 1 <name="svcSetHardwareBreakPoint(0x6c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 109) {
+        uchar svc : 1 <name="svcGetDebugThreadParam(0x6d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 110) {
+        uchar svc : 1 <name="svc0x6E(0x6e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 111) {
+        uchar svc : 1 <name="svc0x6F(0x6f)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 112) {
+        uchar svc : 1 <name="svcCreatePort(0x70)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 113) {
+        uchar svc : 1 <name="svcManageNamedPort(0x71)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 114) {
+        uchar svc : 1 <name="svcConnectToPort(0x72)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 115) {
+        uchar svc : 1 <name="svcSetProcessMemoryPermission(0x73)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 116) {
+        uchar svc : 1 <name="svcMapProcessMemory(0x74)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 117) {
+        uchar svc : 1 <name="svcUnmapProcessMemory(0x75)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 118) {
+        uchar svc : 1 <name="svcQueryProcessMemory(0x76)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 119) {
+        uchar svc : 1 <name="svcMapProcessCodeMemory(0x77)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 120) {
+        uchar svc : 1 <name="svcUnmapProcessCodeMemory(0x78)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 121) {
+        uchar svc : 1 <name="svcCreateProcess(0x79)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 122) {
+        uchar svc : 1 <name="svcStartProcess(0x7a)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 123) {
+        uchar svc : 1 <name="svcTerminateProcess(0x7b)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 124) {
+        uchar svc : 1 <name="svcGetProcessInfo(0x7c)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 125) {
+        uchar svc : 1 <name="svcCreateResourceLimit(0x7d)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 126) {
+        uchar svc : 1 <name="svcSetResourceLimitLimitValue(0x7e)    ", comment=SvcAccessMode>;
+    } else  if(svcNum == 127) {
+        uchar svc : 1 <name="svcCallSecureMonitor(0x7f)    ", comment=SvcAccessMode>;
+    } else {
+        uchar svc : 1 <name="Unknown SVC!    ", comment=SvcAccessMode>;
+    }
+}
+
+local uchar has_mmio = false;
+
+void ParseKernelAccesControl() {
+    uint32 Access <hidden=true>; // Process and reread right
+    local uint32 desc = Access;
+    if(desc == 0xFFFFFFFF) return;
+    FSkip(-4);
+    local uint32 low_bits = 0;
+    while(desc & 1) {
+        desc >>= 1;
+        low_bits++;
+    }
+    desc >>= 1;
+    switch(low_bits) {
+        case 3: /* Kernel Flags */
+            struct _KernelFlags(uint32 low_bits) {
+                uint16 _padding : low_bits + 1 <hidden=true>;
+                uint16 highest_thread_priority : 6;
+                uint16 lowest_thread_priority : 5;
+                uint16 lowest_cpu_id : 8;
+                uint16 highest_cpu_id : 8;
+            } KernelFlags(low_bits);
+            break;
+        case 4: /* Syscall mask */
+            struct _SvcList(uint32 low_bits, uint32 desc) {
+                local uint32 syscall_base = (desc >> 24) * 0x18;
+                local uint32 sc;
+                uchar _padding : low_bits + 1 <hidden=true>;
+                for(sc = 0; sc < 0x18 && syscall_base + sc < 0x80; sc++) {
+                    GrabSVC(syscall_base + sc);
+                }
+            } AllowedSVCs(low_bits, desc);
+            break;
+        case 6: /* Map IO/Normal. */
+            struct _MapIO(uint32 low_bits) {
+                uint16 _padding : low_bits + 1 <hidden=true>;
+                if(!has_mmio) {
+                    uint32 address : 24 <format=hex>;
+                    uchar is_ro : 1;
+                    has_mmio = true;
+                } else {
+                    uint32 size : 24 <format=hex>;
+                    uchar is_norm : 1;
+                }
+            } MapIO_Normal(low_bits);
+            break;
+        case 7: /* Map Normal Page */
+            struct _MapNormalPage(uint32 low_bits) {
+                uint16 _padding : low_bits + 1 <hidden=true>;
+                uint32 address : 24 <format=hex>;
+            } MapNormalPage(low_bits);
+            break;
+        case 11: /* IRQ Pair */
+            struct _IRQPair(uint32 low_bits) {
+                uint16 _padding : low_bits + 1 <hidden=true>;
+                uint16 irq0 : 10;
+                uint16 irq1 : 10;
+            } IRQPair(low_bits);
+            break;
+        case 13: /* Application Type */
+            uint16 _padding : low_bits + 1 <hidden=true>;
+            uchar application_type : 3;
+            break;
+        case 14: /* Kernel Release Version */
+            uint16 _padding : low_bits + 1 <hidden=true>;
+            uint16 kernel_release_version <format=hex>;
+            break;
+        case 15: /* Handle Table Size */
+            uint16 _padding : low_bits + 1 <hidden=true>;
+            uint16 handle_table_size;
+            break; 
+        case 16: /* Debug Flags */
+            struct _DebugFlags(uint32 low_bits) {
+                uint16 _padding : low_bits <hidden=true>;
+                uchar allow_debug : 1;
+                uchar force_debug : 1;
+            } DebugFlags(low_bits);
+            break; 
+        default:
+            uint32 UnknownAccessControl <comment=UnknownAccessControl>;
+            break;
+    }
+}
+
+void ReadServiceAccessControl(int size) {
+    struct _ServiceAccessControl (int size) {
+        local int64 endOffset = FTell() + size;
+        while(FTell() < endOffset) {
+            _service service <name=GetService, comment=GetServiceDescription>;
+        }
+    } ServiceAccessControl(size);
+}
+
+void ReadKernelAccessControl(int size) {
+    struct _KernelAccessControl (int size) {
+        local int64 endOffset = FTell() + size;
+        local int64 s = 0;
+        local int64 e = 0;
+        while(FTell() < endOffset) {
+            s = FTell();
+            ParseKernelAccesControl();
+            e = FTell();
+            if(e-s != 4) {
+                FSkip((s+4)-e);
+            }
+        }
+    } KernelAccessControl(size);
+}
+
+void ReadFSPermissions() {
+    uint64 base_read <hidden=true>;
+    FSkip(-8);
+    // Auto generated code
+    // RW
+    if(0x8000000000000801 & base_read) {
+        if (0x8000000000000801 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_MountLogo", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_MountLogo_DEBUGONLY", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000801 & base_read) {
+        if (0x8000000000000801 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_MountContentMeta", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_MountContentMeta_DEBUGONLY", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000801 & base_read) {
+        if (0x8000000000000801 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_MountContentControl", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_MountContentControl_DEBUGONLY", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000801 & base_read) {
+        if (0x8000000000000801 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_MountContentManual", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_MountContentManual_DEBUGONLY", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000801 & base_read) {
+        if (0x8000000000000801 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_MountContentData", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_MountContentData_DEBUGONLY", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000801 & base_read) {
+        if (0x8000000000000801 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_MountApplicationPackage", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_MountApplicationPackage_DEBUGONLY", comment="RW_0x8000000000000801">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000000 & base_read) {
+        if (0x8000000000000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_", comment="RW_0x8000000000000000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW__DEBUGONLY", comment="RW_0x8000000000000000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000800 & base_read) {
+        if (0x8000000000000800 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_ContentStorageAccess", comment="RW_0x8000000000000800">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_ContentStorageAccess_DEBUGONLY", comment="RW_0x8000000000000800">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000001000 & base_read) {
+        if (0x8000000000001000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_ImageDirectoryAccess", comment="RW_0x8000000000001000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_ImageDirectoryAccess_DEBUGONLY", comment="RW_0x8000000000001000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000084 & base_read) {
+        if (0x8000000000000084 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_OpenBisFileSystemType28, OpenBisFileSystemType32", comment="RW_0x8000000000000084">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_OpenBisFileSystemType28, OpenBisFileSystemType32_DEBUGONLY", comment="RW_0x8000000000000084">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_OpenBisFileSystemType29", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_OpenBisFileSystemType29_DEBUGONLY", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000008080 & base_read) {
+        if (0x8000000000008080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_OpenBisFileSystemType30", comment="RW_0x8000000000008080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_OpenBisFileSystemType30_DEBUGONLY", comment="RW_0x8000000000008080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000008080 & base_read) {
+        if (0x8000000000008080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_OpenBisFileSystemType31", comment="RW_0x8000000000008080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_OpenBisFileSystemType31_DEBUGONLY", comment="RW_0x8000000000008080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW__DEBUGONLY", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_OpenBisFileSystemType33", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0xC000000000200000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_OpenBisFileSystemType33_DEBUGONLY", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0xC000000000200000)">;
+            FSkip(-8);
+        }
+    }
+    if(0xC000000000200000 & base_read) {
+        if (0xC000000000200000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_SdCardAccess", comment="RW_0xC000000000200000 (\[1.0.0-2.3.0\] 0x8000000000000010)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_SdCardAccess_DEBUGONLY", comment="RW_0xC000000000200000 (\[1.0.0-2.3.0\] 0x8000000000000010)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000010 & base_read) {
+        if (0x8000000000000010 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_GameCardUser", comment="RW_0x8000000000000010 (\[1.0.0-2.3.0\] 0x8000000000040020)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_GameCardUser_DEBUGONLY", comment="RW_0x8000000000000010 (\[1.0.0-2.3.0\] 0x8000000000040020)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000040020 & base_read) {
+        if (0x8000000000040020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_SaveDataAccess0", comment="RW_0x8000000000040020 (\[1.0.0-2.3.0\] 0x8000000000000028)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_SaveDataAccess0_DEBUGONLY", comment="RW_0x8000000000040020 (\[1.0.0-2.3.0\] 0x8000000000000028)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000028 & base_read) {
+        if (0x8000000000000028 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_SystemSaveDataAccess0", comment="RW_0x8000000000000028 (\[1.0.0-2.3.0\] 0x8000000000000020)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_SystemSaveDataAccess0_DEBUGONLY", comment="RW_0x8000000000000028 (\[1.0.0-2.3.0\] 0x8000000000000020)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000020 & base_read) {
+        if (0x8000000000000020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_SaveDataAccess1", comment="RW_0x8000000000000020">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_SaveDataAccess1_DEBUGONLY", comment="RW_0x8000000000000020">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000020 & base_read) {
+        if (0x8000000000000020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_SystemSaveDataAccess1", comment="RW_0x8000000000000020 (\[1.0.0-2.3.0\] 0x8000000000010082)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_SystemSaveDataAccess1_DEBUGONLY", comment="RW_0x8000000000000020 (\[1.0.0-2.3.0\] 0x8000000000010082)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010082 & base_read) {
+        if (0x8000000000010082 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition0", comment="RW_0x8000000000010082 (\[1.0.0-2.3.0\] 0x8000000000010080)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition0_DEBUGONLY", comment="RW_0x8000000000010082 (\[1.0.0-2.3.0\] 0x8000000000010080)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010080 & base_read) {
+        if (0x8000000000010080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition10", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition10_DEBUGONLY", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition20", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0x8000000000010080)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition20_DEBUGONLY", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0x8000000000010080)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010080 & base_read) {
+        if (0x8000000000010080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition21", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition21_DEBUGONLY", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010080 & base_read) {
+        if (0x8000000000010080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition22", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition22_DEBUGONLY", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010080 & base_read) {
+        if (0x8000000000010080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition23", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition23_DEBUGONLY", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010080 & base_read) {
+        if (0x8000000000010080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition24", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition24_DEBUGONLY", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010080 & base_read) {
+        if (0x8000000000010080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition25", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition25_DEBUGONLY", comment="RW_0x8000000000010080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010080 & base_read) {
+        if (0x8000000000010080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition26", comment="RW_0x8000000000010080 (\[1.0.0-2.3.0\] 0x8000000000000084)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition26_DEBUGONLY", comment="RW_0x8000000000010080 (\[1.0.0-2.3.0\] 0x8000000000000084)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000084 & base_read) {
+        if (0x8000000000000084 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition27", comment="RW_0x8000000000000084">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition27_DEBUGONLY", comment="RW_0x8000000000000084">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000084 & base_read) {
+        if (0x8000000000000084 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition28", comment="RW_0x8000000000000084 (\[1.0.0-2.3.0\] 0x8000000000000080)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition28_DEBUGONLY", comment="RW_0x8000000000000084 (\[1.0.0-2.3.0\] 0x8000000000000080)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition29", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition29_DEBUGONLY", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition30", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition30_DEBUGONLY", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition31", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition31_DEBUGONLY", comment="RW_0x8000000000000080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition32", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0xC000000000200000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition32_DEBUGONLY", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0xC000000000200000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_BisPartition33", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0x8000000000000100)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_BisPartition33_DEBUGONLY", comment="RW_0x8000000000000080 (\[1.0.0-2.3.0\] 0x8000000000000100)">;
+            FSkip(-8);
+        }
+    }
+    if(0xC000000000200000 & base_read) {
+        if (0xC000000000200000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_", comment="RW_0xC000000000200000 (\[1.0.0-2.3.0\] 0x8000000000100008)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW__DEBUGONLY", comment="RW_0xC000000000200000 (\[1.0.0-2.3.0\] 0x8000000000100008)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000100 & base_read) {
+        if (0x8000000000000100 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_GameCard\_System", comment="RW_0x8000000000000100 (\[1.0.0-2.3.0\] 0xC000000000400000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_GameCard\_System_DEBUGONLY", comment="RW_0x8000000000000100 (\[1.0.0-2.3.0\] 0xC000000000400000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000100008 & base_read) {
+        if (0x8000000000100008 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_MountContent\_System", comment="RW_0x8000000000100008">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_MountContent\_System_DEBUGONLY", comment="RW_0x8000000000100008">;
+            FSkip(-8);
+        }
+    }
+    if(0xC000000000400000 & base_read) {
+        if (0xC000000000400000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_HostAccess", comment="RW_0xC000000000400000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_HostAccess_DEBUGONLY", comment="RW_0xC000000000400000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000010000 & base_read) {
+        if (0x8000000000010000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_RegisteredUpdatePartitionAccess", comment="RW_0x8000000000010000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_RegisteredUpdatePartitionAccess_DEBUGONLY", comment="RW_0x8000000000010000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000000 & base_read) {
+        if (0x8000000000000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="RW_SaveDataInternalStorageAccess", comment="RW_0x8000000000000000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="RW_SaveDataInternalStorageAccess_DEBUGONLY", comment="RW_0x8000000000000000">;
+            FSkip(-8);
+        }
+    }
+    // Bool
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_BisCache", comment="Bool_0x8000000000000080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_BisCache_DEBUGONLY", comment="Bool_0x8000000000000080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000080 & base_read) {
+        if (0x8000000000000080 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_EraseMmc", comment="Bool_0x8000000000000080">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_EraseMmc_DEBUGONLY", comment="Bool_0x8000000000000080">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000010 & base_read) {
+        if (0x8000000000000010 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_GameCardCertificate", comment="Bool_0x8000000000000010">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_GameCardCertificate_DEBUGONLY", comment="Bool_0x8000000000000010">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000010 & base_read) {
+        if (0x8000000000000010 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_GameCardIdSet", comment="Bool_0x8000000000000010">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_GameCardIdSet_DEBUGONLY", comment="Bool_0x8000000000000010">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000200 & base_read) {
+        if (0x8000000000000200 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_GameCardDriver", comment="Bool_0x8000000000000200">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_GameCardDriver_DEBUGONLY", comment="Bool_0x8000000000000200">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000200 & base_read) {
+        if (0x8000000000000200 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_GameCardAsic", comment="Bool_0x8000000000000200">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_GameCardAsic_DEBUGONLY", comment="Bool_0x8000000000000200">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000002020 & base_read) {
+        if (0x8000000000002020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataCreate", comment="Bool_0x8000000000002020">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataCreate_DEBUGONLY", comment="Bool_0x8000000000002020">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000060 & base_read) {
+        if (0x8000000000000060 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataDelete0", comment="Bool_0x8000000000000060">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataDelete0_DEBUGONLY", comment="Bool_0x8000000000000060">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000028 & base_read) {
+        if (0x8000000000000028 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SystemSaveDataCreate0", comment="Bool_0x8000000000000028">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SystemSaveDataCreate0_DEBUGONLY", comment="Bool_0x8000000000000028">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000020 & base_read) {
+        if (0x8000000000000020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SystemSaveDataCreate1", comment="Bool_0x8000000000000020">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SystemSaveDataCreate1_DEBUGONLY", comment="Bool_0x8000000000000020">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000004028 & base_read) {
+        if (0x8000000000004028 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataDelete1", comment="Bool_0x8000000000004028">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataDelete1_DEBUGONLY", comment="Bool_0x8000000000004028">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000060 & base_read) {
+        if (0x8000000000000060 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataInfoReader0", comment="Bool_0x8000000000000060">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataInfoReader0_DEBUGONLY", comment="Bool_0x8000000000000060">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000004020 & base_read) {
+        if (0x8000000000004020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataInfoReader1", comment="Bool_0x8000000000004020">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataInfoReader1_DEBUGONLY", comment="Bool_0x8000000000004020">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000020000 & base_read) {
+        if (0x8000000000020000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataMeta", comment="Bool_0x8000000000020000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataMeta_DEBUGONLY", comment="Bool_0x8000000000020000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000400 & base_read) {
+        if (0x8000000000000400 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_PosixTime", comment="Bool_0x8000000000000400">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_PosixTime_DEBUGONLY", comment="Bool_0x8000000000000400">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000004060 & base_read) {
+        if (0x8000000000004060 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataExtraData\_Read", comment="Bool_0x8000000000004060">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataExtraData\_Read_DEBUGONLY", comment="Bool_0x8000000000004060">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000080000 & base_read) {
+        if (0x8000000000080000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_GlobalAccessMode", comment="Bool_0x8000000000080000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_GlobalAccessMode_DEBUGONLY", comment="Bool_0x8000000000080000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000080000 & base_read) {
+        if (0x8000000000080000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SpeedEmulationMode", comment="Bool_0x8000000000080000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SpeedEmulationMode_DEBUGONLY", comment="Bool_0x8000000000080000">;
+            FSkip(-8);
+        }
+    }
+
+    if(0xC000000000800000 & base_read) {
+        if (0xC000000000800000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_PaddingFiles", comment="Bool_0xC000000000800000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_PaddingFiles_DEBUGONLY", comment="Bool_0xC000000000800000">;
+            FSkip(-8);
+        }
+    }
+    if(0xC000000001000000 & base_read) {
+        if (0xC000000001000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataCorrupt0", comment="Bool_0xC000000001000000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataCorrupt0_DEBUGONLY", comment="Bool_0xC000000001000000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000001000060 & base_read) {
+        if (0x8000000001000060 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataCorrupt1", comment="Bool_0x8000000001000060 (\[1.0.0-4.1.0\] 0xC000000002000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataCorrupt1_DEBUGONLY", comment="Bool_0x8000000001000060 (\[1.0.0-4.1.0\] 0xC000000002000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000060 & base_read) {
+        if (0x8000000000000060 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataVerify", comment="Bool_0x8000000000000060 (\[1.0.0-4.1.0\] 0x8000000004000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataVerify_DEBUGONLY", comment="Bool_0x8000000000000060 (\[1.0.0-4.1.0\] 0x8000000004000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0xC000000002000000 & base_read) {
+        if (0xC000000002000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveData\_SystemManagement", comment="Bool_0xC000000002000000 (\[1.0.0-4.1.0\] 0x8000000008000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveData\_SystemManagement_DEBUGONLY", comment="Bool_0xC000000002000000 (\[1.0.0-4.1.0\] 0x8000000008000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000004000000 & base_read) {
+        if (0x8000000004000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SdCardFormat", comment="Bool_0x8000000004000000 (\[1.0.0-4.1.0\] 0x8000000010000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SdCardFormat_DEBUGONLY", comment="Bool_0x8000000004000000 (\[1.0.0-4.1.0\] 0x8000000010000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000008000000 & base_read) {
+        if (0x8000000008000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_RightsId", comment="Bool_0x8000000008000000 (\[1.0.0-4.1.0\] 0x8000000000000800)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_RightsId_DEBUGONLY", comment="Bool_0x8000000008000000 (\[1.0.0-4.1.0\] 0x8000000000000800)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000010000000 & base_read) {
+        if (0x8000000010000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_ExternalKey", comment="Bool_0x8000000010000000 (\[1.0.0-4.1.0\] 0x8000000000004020)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_ExternalKey_DEBUGONLY", comment="Bool_0x8000000010000000 (\[1.0.0-4.1.0\] 0x8000000000004020)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000800 & base_read) {
+        if (0x8000000000000800 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SdCardEncryptionSeed", comment="Bool_0x8000000000000800 (\[1.0.0-4.1.0\] 0x8000000000002020)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SdCardEncryptionSeed_DEBUGONLY", comment="Bool_0x8000000000000800 (\[1.0.0-4.1.0\] 0x8000000000002020)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000004020 & base_read) {
+        if (0x8000000000004020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataExtraData\_Write0", comment="Bool_0x8000000000004020 (\[1.0.0-4.1.0\] 0x8000000000000028)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataExtraData\_Write0_DEBUGONLY", comment="Bool_0x8000000000004020 (\[1.0.0-4.1.0\] 0x8000000000000028)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000000 & base_read) {
+        if (0x8000000000000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataExtraData\_Write1", comment="Bool_0x8000000000000000 (\[1.0.0-4.1.0\] 0x8000000020000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataExtraData\_Write1_DEBUGONLY", comment="Bool_0x8000000000000000 (\[1.0.0-4.1.0\] 0x8000000020000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000002020 & base_read) {
+        if (0x8000000000002020 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataExtend0", comment="Bool_0x8000000000002020 (\[1.0.0-4.1.0\] 0x8000000040000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataExtend0_DEBUGONLY", comment="Bool_0x8000000000002020 (\[1.0.0-4.1.0\] 0x8000000040000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000028 & base_read) {
+        if (0x8000000000000028 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataExtend1", comment="Bool_0x8000000000000028 (\[1.0.0-4.1.0\] 0x8000000000000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataExtend1_DEBUGONLY", comment="Bool_0x8000000000000028 (\[1.0.0-4.1.0\] 0x8000000000000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000020000000 & base_read) {
+        if (0x8000000020000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_UpdatePartitionRegister", comment="Bool_0x8000000020000000 (\[1.0.0-4.1.0\] 0x8000000000000000)">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_UpdatePartitionRegister_DEBUGONLY", comment="Bool_0x8000000020000000 (\[1.0.0-4.1.0\] 0x8000000000000000)">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000040000000 & base_read) {
+        if (0x8000000040000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataTransfer", comment="Bool_0x8000000040000000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataTransfer_DEBUGONLY", comment="Bool_0x8000000040000000">;
+            FSkip(-8);
+        }
+    }
+    if(0x0000000080000002 & base_read) {
+        if (0x0000000080000002 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataTransferVersion2", comment="Bool_0x0000000080000002">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataTransferVersion2_DEBUGONLY", comment="Bool_0x0000000080000002">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000000 & base_read) {
+        if (0x8000000000000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_MmcPatrol", comment="Bool_0x8000000000000000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_MmcPatrol_DEBUGONLY", comment="Bool_0x8000000000000000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000000000 & base_read) {
+        if (0x8000000000000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataTransferKey", comment="Bool_0x8000000000000000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataTransferKey_DEBUGONLY", comment="Bool_0x8000000000000000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000080200000 & base_read) {
+        if (0x8000000080200000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SdCardDetectionEventNotifier", comment="Bool_0x8000000080200000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SdCardDetectionEventNotifier_DEBUGONLY", comment="Bool_0x8000000080200000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000080000110 & base_read) {
+        if (0x8000000080000110 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_GameCardDetectionEventNotifier", comment="Bool_0x8000000080000110">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_GameCardDetectionEventNotifier_DEBUGONLY", comment="Bool_0x8000000080000110">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000000100008 & base_read) {
+        if (0x8000000000100008 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SystemDataUpdateEventNotifier", comment="Bool_0x8000000000100008">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SystemDataUpdateEventNotifier_DEBUGONLY", comment="Bool_0x8000000000100008">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000080010000 & base_read) {
+        if (0x8000000080010000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SystemDataUpdateEventNotify", comment="Bool_0x8000000080010000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SystemDataUpdateEventNotify_DEBUGONLY", comment="Bool_0x8000000080010000">;
+            FSkip(-8);
+        }
+    }
+    if(0x0000000080000001 & base_read) {
+        if (0x0000000080000001 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_AccessFailureResolver", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_AccessFailureResolver_DEBUGONLY", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        }
+    }
+    if(0x0000000080000001 & base_read) {
+        if (0x0000000080000001 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_AccessFailureDetectionEvent", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_AccessFailureDetectionEvent_DEBUGONLY", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        }
+    }
+    if(0x0000000080000001 & base_read) {
+        if (0x0000000080000001 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_AccessFailureDetected", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_AccessFailureDetected_DEBUGONLY", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        }
+    }
+    if(0x0000000080000001 & base_read) {
+        if (0x0000000080000001 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_AccessFailureResolve", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_AccessFailureResolve_DEBUGONLY", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        }
+    }
+    if(0x0000000080000001 & base_read) {
+        if (0x0000000080000001 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_AccessFailureAbandon", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_AccessFailureAbandon_DEBUGONLY", comment="Bool_0x0000000080000001">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000040000000 & base_read) {
+        if (0x8000000040000000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SaveDataInternalStorageTotalSize", comment="Bool_0x8000000040000000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SaveDataInternalStorageTotalSize_DEBUGONLY", comment="Bool_0x8000000040000000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000080200000 & base_read) {
+        if (0x8000000080200000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_SdCardAccessibility", comment="Bool_0x8000000080200000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool_SdCardAccessibility_DEBUGONLY", comment="Bool_0x8000000080200000">;
+            FSkip(-8);
+        }
+    }
+    if(0x8000000080080000 & base_read) {
+        if (0x8000000080080000 & (base_read & 0xBFFFFFFFFFFFFFFF)) {
+            uint64 permission <name="Bool_", comment="Bool_0x8000000080080000">;
+            FSkip(-8);
+        } else {
+            uint64 permission <name="Bool__DEBUGONLY", comment="Bool_0x8000000080080000">;
+            FSkip(-8);
+        }
+    }
+
+
+    uint64 RawPermissions <format=binary>;
+}
+
+struct _FSPermissions {
+    ReadFSPermissions();
+};
+
+struct _FsAccess {
+    char Version;
+    char _padding0[3] <hidden=true>;
+    _FSPermissions FSPermissions;
+    char unknown[0x20];
+};
+
+struct _NPDM {
+    local uint64 startOffset = FTell();
+    char MAGIC[4];
+    uint64 _padding0 <hidden=true>;
+    struct _MmuFlags {
+        uchar Is64BitInstructions : 1 <comment="Are 64 bit instructions used">;
+        uchar Is64BitAddressSpaceWidth : 1 <comment="Use 64 bit address space">;
+        uchar Is32BitAddressSpaceWidth : 1<comment="Use 32 bit address space">;
+    } MmuFlags;
+    char _padding1 <hidden=true>;
+    uchar MainThreadPriority <format=hex>;
+    uchar DefaultCpuId;
+    char _padding2[8] <hidden=true>;
+    uint32 ProcessCategory <comment=GetProcessCategory>;
+    uint32 MainStackSize <format=hex>;
+    string TitleName <fgcolor=cBlack, bgcolor=0x75AF96>;
+    local uint64 Difference = FTell() - startOffset;
+    FSkip(0x70 - Difference);
+    int32 ACI0Offset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int32 ACI0Size <fgcolor=cBlack, bgcolor=0x718EA4>;
+    int32 ACIDOffset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int32 ACIDSize <fgcolor=cBlack, bgcolor=0x718EA4>;
+} NPDM;
+
+FSeek(NPDM.ACI0Offset);
+
+struct _ACI0 {
+    char MAGIC[4];
+    char _padding0[0xc] <hidden=true>;
+    uint64 TitleId <format=hex, fgcolor=cBlack, bgcolor=0x75AF96>;
+    uint64 LowestAllowedTitleId <format=hex>;
+
+    int FSAccessHeader_Offset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int FSAccessHeader_Size <fgcolor=cBlack, bgcolor=0x718EA4>;
+    int ServiceAccessControl_Offset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int ServiceAccessControl_Size <fgcolor=cBlack, bgcolor=0x718EA4>;
+    int KernelAccessControl_Offset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int KernelAccessControl_Size <fgcolor=cBlack, bgcolor=0x718EA4>;
+
+    uint64 _padding2 <hidden=true>;
+
+    FSeek(NPDM.ACI0Offset + FSAccessHeader_Offset);
+    struct _FSAccessHeader {
+        uchar Version;
+        char _padding0[3] <hidden=true>;
+        _FSPermissions FSPermissions;
+        uint32 Unknown[4];
+    } FSAccessHeader;
+
+    FSeek(NPDM.ACI0Offset + ServiceAccessControl_Offset);
+    ReadServiceAccessControl(ServiceAccessControl_Size);
+
+    FSeek(NPDM.ACI0Offset + KernelAccessControl_Offset);
+    ReadKernelAccessControl(KernelAccessControl_Size);
+
+} ACI0;
+
+FSeek(NPDM.ACIDOffset);
+
+struct _ACID {
+    uchar RSA2048Signature[0x100] <format=hex>;
+    uchar RSA2048SignaturePubK[0x100] <format=hex>;
+    char MAGIC[4];
+    int SigSize;
+    uint32 _padding0 <hidden=true>;
+    struct _Flags {
+        uchar Retail : 1 <comment=RetailCheck>;
+        uchar Unknown : 1;
+        uchar PoolPartition : 2;
+        char _padding1[3] <hidden=true>;
+    } Flags;
+    uint64 TitleIdRange_Min <format=hex>;
+    uint64 TitleIdRange_Max <format=hex>;
+
+    int FSAccessControl_Offset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int FSAccessControl_Size <fgcolor=cBlack, bgcolor=0x718EA4>;
+    int ServiceAccessControl_Offset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int ServiceAccessControl_Size <fgcolor=cBlack, bgcolor=0x718EA4>;
+    int KernelAccessControl_Offset <fgcolor=cBlack, bgcolor=0xFFC2AA>;
+    int KernelAccessControl_Size <fgcolor=cBlack, bgcolor=0x718EA4>;
+
+    uint64 _padding2 <hidden=true>;
+
+    FSeek(NPDM.ACIDOffset + FSAccessControl_Offset);
+    _FsAccess FsAccess;
+    
+    FSeek(NPDM.ACIDOffset + ServiceAccessControl_Offset);
+    ReadServiceAccessControl(ServiceAccessControl_Size);
+
+    FSeek(NPDM.ACIDOffset + KernelAccessControl_Offset);
+    ReadKernelAccessControl(KernelAccessControl_Size);
+} ACID;
