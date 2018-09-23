@@ -1,6 +1,100 @@
 //------------------------------------------------
 //--- 010 Editor v8.0.1 Binary Template
 //
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct NROStart {
+    int32 unused;
+    uint32 mod0_offset;
+    uint64 padding;
+} start;
+
+struct NROHeader {
+    char magic[4];
+    uint32 format;
+    uint64 size;
+    uint32 flags;
+    uint64 segment_headers[3];
+    uint32 bss_size;
+    uint32 reserved;
+    char buildid[0x20];
+    uint64 reserved;
+    uint64 secondary_segment_headers[3];
+} header;
+
+FSeek(header.size);
+
+
+struct AsetSection {
+    uint64 offset;
+    uint64 size;
+};
+
+struct AsetHeader {
+    char magic[4];
+    uint32 format;
+    struct AsetSection icon;
+    struct AsetSection nacp;
+    struct AsetSection romfs;    
+} aset_header;
+
+
+int align_up(int x) {
+    return (x + 3) & ~3;
+}
+
+if (aset_header.nacp.size != 0) {
+FSeek(header.size + aset_header.nacp.offset);
+
+typedef struct language_entry {
+    char app_name[0x200];
+    char dev_name[0x100];
+} language_entry_t;
+
+struct {
+    language_entry_t language_entries[16];
+    char zeroes[0x24];
+    int32 unk1;
+    int32 unk2;
+    int32 unk3;
+    int32 unk4;
+    int32 unk5;
+    int64 title_id;
+    char unk6[0x20];
+    char version[0x10];
+    int64 base_titleid;
+    int64 title_id2;
+    int32 unk7;
+    int32 unk8;
+    int32 unk9;
+    char zeroes2[0x1C];
+    int64 product_code;
+    int64 title_id3;
+    int64 title_id_arr[7];
+    int32 unk10;
+    int32 unk11;
+    int64 title_id4;
+    char bcat_passphrase[0x40];
+    char zeroes3[0xEC0];
+} Nacp;
+}
+
+if (aset_header.romfs.size != 0) {
+
+local int romfs_start = header.size + aset_header.romfs.offset;
+FSeek(romfs_start);
+
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
 //      File: RomFs
 //   Authors: 
 //   Version: 
@@ -11,14 +105,6 @@
 //   History: 
 //------------------------------------------------
 
-// In nro.bt, set this to header.size + aset_header.romfs.offset
-local int romfs_start = 0;
-
-int align_up(int x) {
-    return (x + 3) & ~3;
-}
-
-FSeek(romfs_start);
 
 struct {
     uint64 header_size;
@@ -46,20 +132,14 @@ typedef struct {
     uint32 file;
     uint32 hash;
     uint32 name_size;
-    if (name_size != 0) { // Happens for the root.
+    if (name_size != 0) {
         char name[name_size];
     }
     char alignment_padding[align_up(FTell() - romfs_start) - (FTell() - romfs_start)];
 } romfs_direntry_t;
 
-string direntry_name( romfs_direntry_t &entry ) {
-    string s;
-    SPrintf(s, "DirEntry[%d, %s]", entry.parent, entry.name_size > 0 ? entry.name : "");
-    return s;
-}
-
 while (FTell() < romfs_start + romfs_header.dir_meta_table_size + romfs_header.dir_meta_table_offset) {
-    romfs_direntry_t DirMetaTable<name=direntry_name>;
+    romfs_direntry_t DirMetaTable;
 }
 
 
@@ -80,4 +160,5 @@ typedef struct {
 
 while (FTell() < romfs_start + romfs_header.file_meta_table_size + romfs_header.file_meta_table_offset) {
     romfs_fentry_t FileTable;
+}
 }

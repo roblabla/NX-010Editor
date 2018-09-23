@@ -1,0 +1,106 @@
+typedef struct _ABDescriptor {
+    uint32 first_word;
+    uint32 second_word;
+    uint32 third_word;
+} ABDescriptor <read=PrintABDescriptor>;
+
+string PrintABDescriptor( ABDescriptor &desc ) {
+    string s;
+    int flags = desc.third_word & 0b11;
+    uint64 addr = desc.second_word | (((uint64)desc.third_word >> 24) & 0b1111) << 32 | (((uint64)desc.third_word >> 2) & 0b111) << 36;
+    uint64 size = desc.first_word | (((uint64)desc.third_word >> 28) & 0b1111) << 32;
+    SPrintf(s, "(flags=%u, addr=%X, size=%X)", flags, addr, size);
+    return s;
+}
+
+typedef struct _XDescriptor {
+    uint32 first_word;
+    uint32 second_word;
+} XDescriptor <read=PrintXDescriptor>;
+
+string PrintXDescriptor( XDescriptor &desc ) {
+    string s;
+    int counter = desc.first_word & 0b111000111111;
+    uint64 addr = (((uint64)desc.first_word >> 6) & 0b111) << 36 | (((uint64)desc.first_word >> 12) & 0b1111) << 32 | desc.second_word;
+    int size = desc.first_word >> 16;
+    SPrintf(s, "(counter=%u, addr=%X, size=%X)", counter, addr, size);
+    return s;
+}
+
+typedef struct _Payload {
+    // TODO: Handle domain messages somehow
+    char magic[8];
+    if (header.type == 6 || header.type == 7) {
+        uint cmd_id;
+        uint token;
+    } else {
+        uint64 cmd_id;
+    }
+} Payload;
+
+struct IPCBuf {
+    struct HEADER {
+        short type;
+        char num_x_descriptors : 4;
+        char num_a_descriptors : 4;
+        char num_b_descriptors : 4;
+        char num_w_descriptors : 4;
+        int raw_data_size : 10;
+        int flags_c_descriptor : 4;
+        int unknown : 17;
+        int enable_handle_descriptor : 1;
+        
+    } header;
+
+    if (header.enable_handle_descriptor) {
+        struct HandleDescriptor {
+            int send_pid : 1;
+            int number_copy_handles : 4;
+            int number_move_handles : 4;
+            if (send_pid) {
+                int64 pid;
+            }
+            if (number_copy_handles) {
+                int copy_handles[number_copy_handles];
+            }
+            if (number_move_handles) {
+                int move_handles[number_move_handles];
+            }
+        } handle_descriptor;
+    }
+    if (header.num_x_descriptors) {
+        XDescriptor x_descriptors[header.num_x_descriptors];
+    }
+    if (header.num_a_descriptors) {
+        ABDescriptor a_descriptors[header.num_a_descriptors];
+    }
+    if (header.num_b_descriptors) {
+        ABDescriptor b_descriptors[header.num_b_descriptors];
+    }
+    // TODO: W descriptors
+
+    struct RawDataSection {
+        local uint64 cur = FTell() % 16;
+        char pad[cur % 16];
+    
+        union PayloadDomain {
+            struct Normal {
+                Payload payload_header;
+                char raw_data[(header.raw_data_size * 4) - (16 + 16)];
+            } normal;
+            struct Domain {
+                char command;
+                char input_object_count;
+                uint16 data_payload_size;
+                int object_id;
+                int padding[2];
+                Payload payload_header;
+                char raw_data[data_payload_size];
+                int input_object_ids[((header.raw_data_size * 4) - (16 + 16 + 16) - data_payload_size) / 4];
+            } domain;
+        } data;
+    
+        char _pad[16 - (cur % 16)];
+    } rawdata;
+    
+} buf;
