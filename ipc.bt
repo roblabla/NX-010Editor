@@ -38,7 +38,18 @@ typedef struct _Payload {
     }
 } Payload;
 
-struct IPCBuf {
+local uint64 SizeofPayload = 8 + sizeof(uint64);
+
+typedef struct _DomainHeader {
+    char command;
+    char input_object_count;
+    uint16 data_payload_size;
+    int object_id;
+    int padding[2];
+} DomainHeader;
+
+typedef struct IPCBuf {
+    local uint64 start = FTell();
     struct HEADER {
         short type;
         char num_x_descriptors : 4;
@@ -80,27 +91,30 @@ struct IPCBuf {
     // TODO: W descriptors
 
     struct RawDataSection {
-        local uint64 cur = FTell() % 16;
-        char pad[cur % 16];
+        local uint64 TotalPadding = 16;
+        local uint64 cur = (FTell() - start) % TotalPadding;
+        char pad[TotalPadding - cur];
     
         union PayloadDomain {
             struct Normal {
                 Payload payload_header;
-                char raw_data[(header.raw_data_size * 4) - (16 + 16)];
+                char raw_data[(header.raw_data_size * 4) - (16 + sizeof(payload_header))]; // 16 == pad
             } normal;
-            struct Domain {
-                char command;
-                char input_object_count;
-                uint16 data_payload_size;
-                int object_id;
-                int padding[2];
-                Payload payload_header;
-                char raw_data[data_payload_size];
-                int input_object_ids[((header.raw_data_size * 4) - (16 + 16 + 16) - data_payload_size) / 4];
-            } domain;
+            if (TotalPadding + sizeof(DomainHeader) + SizeofPayload < header.raw_data_size * 4) {
+                struct Domain {
+                    DomainHeader domain_header;
+                    Payload payload_header;
+                    if (TotalPadding + sizeof(DomainHeader) + SizeofPayload + domain_header.data_payload_size < header.raw_data_size * 4) {
+                        char raw_data[domain_header.data_payload_size];
+                        int input_object_ids[(((header.raw_data_size * 4) - (TotalPadding + sizeof(DomainHeader) + SizeofPayload + domain_header.data_payload_size))) / 4];
+                    }
+                } domain;
+            }
         } data;
     
-        char _pad[16 - (cur % 16)];
+        char _pad[cur];
     } rawdata;
     
-} buf;
+} IpcBuffer;
+
+IpcBuffer buf;
