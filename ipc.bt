@@ -29,13 +29,10 @@ string PrintXDescriptor( XDescriptor &desc ) {
 
 typedef struct _Payload {
     // TODO: Handle domain messages somehow
-    char magic[8];
-    if (header.type == 6 || header.type == 7) {
-        uint cmd_id;
-        uint token;
-    } else {
-        uint64 cmd_id;
-    }
+    char magic[4];
+    uint version;
+    uint cmd_id;
+    uint token;
 } Payload;
 
 local uint64 SizeofPayload = 8 + sizeof(uint64);
@@ -98,14 +95,14 @@ typedef struct IPCBuf {
         union PayloadDomain {
             struct Normal {
                 Payload payload_header;
-                char raw_data[(header.raw_data_size * 4) - (16 + sizeof(payload_header))]; // 16 == pad
+                char raw_data[(header.raw_data_size * 4) - (16 + sizeof(payload_header))] <bgcolor=cRed>; // 16 == pad
             } normal;
             if (TotalPadding + sizeof(DomainHeader) + SizeofPayload < header.raw_data_size * 4) {
                 struct Domain {
                     DomainHeader domain_header;
                     Payload payload_header;
                     if (TotalPadding + sizeof(DomainHeader) + SizeofPayload + domain_header.data_payload_size < header.raw_data_size * 4) {
-                        char raw_data[domain_header.data_payload_size];
+                        char raw_data[domain_header.data_payload_size] <bgcolor=cRed>;
                         int input_object_ids[(((header.raw_data_size * 4) - (TotalPadding + sizeof(DomainHeader) + SizeofPayload + domain_header.data_payload_size))) / 4];
                     }
                 } domain;
