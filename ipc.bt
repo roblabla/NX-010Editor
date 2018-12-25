@@ -1,3 +1,16 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: IPC
+//   Authors: roblabla
+//   Version: 1.0.0
+//   Purpose: Parse IPC Command Buffers
+//  Category: Nintendo Switch
+// File Mask:
+//  ID Bytes:
+//   History:
+//------------------------------------------------
+
 typedef struct _ABDescriptor {
     uint32 first_word;
     uint32 second_word;

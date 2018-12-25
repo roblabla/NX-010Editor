@@ -2,13 +2,13 @@
 //--- 010 Editor v8.0.1 Binary Template
 //
 //      File: RomFs
-//   Authors: 
-//   Version: 
-//   Purpose: 
-//  Category: 
-// File Mask: 
-//  ID Bytes: 
-//   History: 
+//   Authors: roblabla
+//   Version: 1.0.0
+//   Purpose: Parse RomFS files
+//  Category: Nintendo Switch
+// File Mask: *.romfs
+//  ID Bytes:
+//   History:
 //------------------------------------------------
 
 // In nro.bt, set this to header.size + aset_header.romfs.offset

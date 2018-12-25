@@ -1,13 +1,13 @@
 //------------------------------------------------
 //--- 010 Editor v8.0.1 Binary Template
 //
-//      File: 
-//   Authors: 
-//   Version: 
-//   Purpose: 
-//  Category: 
-// File Mask: 
-//  ID Bytes: 
+//      File: NRO
+//   Authors: roblabla
+//   Version: 1.0.0
+//   Purpose: Parse NRO Files
+//  Category: Nintendo Switch
+// File Mask: *.nro
+//  ID Bytes: [+16] NRO0
 //   History: 
 //------------------------------------------------
 
