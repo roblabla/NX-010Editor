@@ -2,7 +2,7 @@
 //--- 010 Editor v8.0.1 Binary Template
 //
 //      File: cnmt.bt
-//   Authors: Adubbz
+//   Authors: Adubbz, Moosehunter
 //   Version: 1.0
 //   Purpose: Parse cnmt files
 //  Category: Nintendo Switch
@@ -43,6 +43,17 @@ string NCAIDRead(_NCAID t)
     return s;
 }
 
+enum <ubyte> _CONTENT_ENTRY_TYPE
+{
+    META, 
+    PROGRAM, 
+    DATA, 
+    CONTROL, 
+    OFFLINE_MANUAL_HTML, 
+    LEGAL_HTML, 
+    GAME_UPDATE_PATCHES
+};
+
 enum <ubyte> _TITLE_TYPE
 {
     SYSTEM_PROGRAM = 0x1,
@@ -54,6 +65,72 @@ enum <ubyte> _TITLE_TYPE
     UPDATE_TITLE = 0x81,
     ADDON_CONTENT = 0x82,
     DELTA_TITLE = 0x83
+};
+
+struct CONTENT_ENTRY_DELTA // FragmentSet
+{
+    _NCAID NcaIdOld;
+    _NCAID NcaIdNew;
+    SetBackColor(cLtBlue);
+    ubyte SizeOld[0x6];
+    ubyte SizeNew[0x6];
+    ushort Unk;
+    _CONTENT_ENTRY_TYPE Type;
+    byte Unk2;
+    uint Unk3;
+};
+
+struct CONTENT_ENTRY_DELTA2
+{
+    _NCAID NcaId;
+    ubyte Size[0x6];
+    ushort Unk;
+};
+
+struct CONTENT_ENTRY
+{
+    _HASH Hash <bgcolor=cGreen>;
+    SetBackColor(cLtBlue);
+    _NCAID NcaId;
+    ubyte Size[0x6];
+    _CONTENT_ENTRY_TYPE Type;
+    ubyte Padding <bgcolor=cNone>;
+};
+
+struct PreviousMeta {
+  uint64 TitleId;
+  uint Version;
+  _TITLE_TYPE Type;
+  byte Padding[3];
+  _HASH Hash <bgcolor=cGreen>;
+  ushort unk;
+  ushort unk2;
+  uint unk3;
+};
+
+struct PrevDelta {
+  uint64 TitleIdOld;
+  uint64 TitleIdNew;
+  uint VersionOld;
+  uint VersionNew;
+  uint64 Size;
+  uint64 Unk;
+};
+
+struct Delta {
+  uint64 TitleIdOld;
+  uint64 TitleIdNew;
+  uint VersionOld;
+  uint VersionNew;
+  uint64 Unk;
+  uint64 Unk1;
+};
+
+struct PreviousContent {
+  _NCAID NcaId;
+  ubyte Size[0x6];
+  _CONTENT_ENTRY_TYPE Type;
+  byte Padding;
 };
 
 struct _CNMT_HEADER
@@ -93,6 +170,7 @@ struct _TYPE_HEADER
         case UPDATE_TITLE:
             uint64 OriginalTitleId;
             uint64 Padding <bgcolor=cNone>;
+            ubyte Padding2[0x8];
             break;
         case ADDON_CONTENT:
             uint64 ApplicationTitleId;
@@ -104,32 +182,13 @@ struct _TYPE_HEADER
 
 if (CNMT_HEADER.Type != SYSTEM_UPDATE)
 {
-    enum <ubyte> _CONTENT_ENTRY_TYPE
-    {
-        META, 
-        PROGRAM, 
-        DATA, 
-        CONTROL, 
-        OFFLINE_MANUAL_HTML, 
-        LEGAL_HTML, 
-        GAME_UPDATE_PATCHES
-    };
-    
-    struct _CONTENT_ENTRY
-    {
-        _HASH Hash <bgcolor=cDkBlue>;
-        SetBackColor(cLtBlue);
-        _NCAID NcaId;
-        ubyte Size[0x6];
-        _CONTENT_ENTRY_TYPE Type;
-        ubyte Padding <bgcolor=cNone>;
-    } CONTENT_ENTRY[CNMT_HEADER.NumContentEntries];
+    CONTENT_ENTRY ContentEntries[CNMT_HEADER.NumContentEntries];
 }
 else
 {
     struct _META_RECORD
     {
-        uint64 TitleId <bgcolor=cDkBlue>;
+        uint64 TitleId <bgcolor=cGreen>;
         SetBackColor(cLtBlue);
         uint32 TitleVersion;
         _TITLE_TYPE TitleType;
@@ -138,6 +197,30 @@ else
         uint16 Unk2;
         
     } META_RECORD[CNMT_HEADER.NumMetaEntries];
+}
+
+if (CNMT_HEADER.Type == UPDATE_TITLE)
+{
+  int PrevMetaCount;
+  int PrevDeltaCount;
+  int DeltaInfoCount;
+  int DeltaChangeCount;
+  int PrevContentCount;
+  int DeltaContentCount;
+  int Padding;
+
+  PreviousMeta PrevMetas[PrevMetaCount];
+  PrevDelta PrevDeltas[PrevDeltaCount];
+  Delta DeltaInfo[DeltaInfoCount];
+  CONTENT_ENTRY_DELTA DeltaChanges[DeltaChangeCount];
+  PreviousContent PrevContents[PrevContentCount];
+  CONTENT_ENTRY DeltaContentEntries[DeltaContentCount];
+  if(DeltaContentCount > 0)
+  {
+    int Unk0;
+    int Unk1;
+    int Unk2;    
+  }
 }
 
 _HASH UnkHash <bgcolor=cSilver>;
