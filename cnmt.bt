@@ -144,16 +144,17 @@ struct _CNMT_HEADER
 
     if (Type == SYSTEM_UPDATE)
     {
-        ubyte Unk2[0x4];
+        uint16 TableOffset;
+        uint16 _Unknown;
         uint16 NumMetaEntries;
-        ubyte Padding[0xC];
+        ubyte Padding[0xC + TableOffset];
     }
     else
     {
         uint16 TableOffset;
         uint16 NumContentEntries;
         uint16 NumMetaEntries;
-        ubyte Padding[0xC];
+        ubyte Padding[0xC + TableOffset];
     }
 } CNMT_HEADER;
 
