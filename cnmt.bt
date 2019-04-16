@@ -166,16 +166,19 @@ struct _TYPE_HEADER
     {
         case REGULAR_APPLICATION:
             uint64 PatchTitleId;
-            uint64 Padding <bgcolor=cNone>;
+            uint32 RequiredSystemVersion;
+            uint32 Unused <bgcolor=cNone>;
             break;
         case UPDATE_TITLE:
             uint64 OriginalTitleId;
-            uint64 Padding <bgcolor=cNone>;
+            uint32 RequiredSystemVersion;
+            uint32 Unused <bgcolor=cNone>;
             ubyte Padding2[0x8];
             break;
         case ADDON_CONTENT:
             uint64 ApplicationTitleId;
-            uint64 Padding <bgcolor=cNone>;
+            uint32 RequiredAppVersion;
+            uint32 Unused <bgcolor=cNone>;
             break;
     }
 
