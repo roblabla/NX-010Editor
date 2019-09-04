@@ -1,0 +1,95 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: *.nca
+//  ID Bytes: NCA3
+//   History: 
+//------------------------------------------------
+
+
+
+enum<byte> RawIntegrityVerificationType {
+    Ivfc = 0, Pfs0Ivfc = 1
+};
+
+enum<byte> RawFsType {
+    Pfs0Fs = 2, RomFs = 3
+};
+
+enum<byte> RawCryptType {
+    None = 1, Xts = 2, Ctr = 3, Bktr = 4
+};
+
+struct RawPfs0Superblock {
+    byte master_hash[0x20];
+    uint32 block_size;
+    uint32 always_2;
+    uint64 hash_table_offset;
+    uint64 hash_table_size;
+    uint64 pfs0_offset;
+    uint64 pfs0_size;
+    byte _0x48[0xF0];
+};
+
+union RawSuperblock {
+    RawPfs0Superblock pfs0;
+    byte raw[0x138];
+};
+
+struct RawNcaFsHeader {
+    uint16 version;
+    RawIntegrityVerificationType integrity_verification_type;
+    RawFsType fs_type;
+    RawCryptType crypt_type;
+    byte _0x5[0x3];
+    RawSuperblock superblock;
+    uint64 section_ctr;
+    byte _0x148[0xb8];
+};
+
+struct RawSectionTableEntry {
+    uint32 media_start_offset;
+    uint32 media_end_offset;
+    uint32 unknown1;
+    uint32 unknown2;
+};
+
+struct RawSectionHash {
+    byte hash[0x20];
+};
+
+struct RawNca {
+    byte fixed_key_sig[0x100];
+    byte npdm_sig[0x100];
+    char magic[4];
+    byte is_gamecard;
+    byte content_type;
+    byte crypto_type;
+    byte key_index;
+    uint64 nca_size;
+    uint64 title_id;
+    uint32 content_index;
+    uint32 sdk_version;
+    byte crypto_type2;
+    byte _padding[15];
+    byte rights_id[0x10];
+    RawSectionTableEntry section_entries[4];
+    RawSectionHash section_hashes[4];
+    byte encrypted_xts_key[0x20];
+    byte encrypted_ctr_key[0x10];
+    byte unknown_new_key[0x10];
+    // Should be [u8; 0xC0], but let's use [u64; 24] because it implements
+    // Default.
+    byte _padding2[0xC0];
+    RawNcaFsHeader fs_headers[4];
+} nca;
+
+if (nca.section_entries[0].media_start_offset != 0) {
+    FSeek(nca.section_entries[0].media_start_offset * 512);
+    char section0[(nca.section_entries[0].media_end_offset - nca.section_entries[0].media_start_offset) * 512];
+}
