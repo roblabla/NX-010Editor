@@ -20,7 +20,7 @@ struct NROStart {
 struct NROHeader {
     char magic[4];
     uint32 format;
-    uint64 size;
+    uint32 size;
     uint32 flags;
     uint64 segment_headers[3];
     uint32 bss_size;
