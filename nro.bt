@@ -17,21 +17,46 @@ struct NROStart {
     uint64 padding;
 } start;
 
+struct Segment {
+    uint32 addr;
+    uint32 size;
+};
+
 struct NROHeader {
     char magic[4];
-    uint32 format;
+    uint32 version;
     uint32 size;
     uint32 flags;
-    uint64 segment_headers[3];
+    Segment segment_headers[3];
     uint32 bss_size;
     uint32 reserved;
     char buildid[0x20];
-    uint64 reserved;
-    uint64 secondary_segment_headers[3];
+    uint32 dso_handle_offset;
+    uint32 reserved;
+    Segment secondary_segment_headers[3];
 } header;
 
-FSeek(header.size);
+FSeek(start.mod0_offset);
 
+struct MOD0 {
+    char magic[4];
+    uint32 dynamic_offset;
+    uint32 bss_start_offset;
+    uint32 bss_end_offset;
+    uint32 eh_frame_hdr_start_offset;
+    uint32 eh_frame_hdr_end_offset;
+    uint32 module_ptr;
+} mod0;
+
+FSeek(header.segment_headers[1].addr);
+
+struct ModuleInfo {
+    int unknown;
+    int name_size;
+    char name[name_size];
+} mod_info;
+
+FSeek(header.size);
 
 struct AsetSection {
     uint64 offset;
